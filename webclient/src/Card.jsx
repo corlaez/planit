@@ -1,12 +1,13 @@
 import React from 'react';
 
-const style = {
+const style = selected => ({
     width: 150, 
     height: 250, 
     border: '5px solid red', 
     borderRadius: 15, 
-    fontSize: 30
-};
+    fontSize: 30,
+    backgroundColor: selected ? 'red' : 'white'
+});
 
 class Card extends React.Component {
     state = {  }
@@ -20,8 +21,12 @@ class Card extends React.Component {
       this.props.send(this.props.text)
     }
 
+    get isSelected() {
+        return this.props.selected === this.props.text
+    }
+
     render() { 
-        return <div style={style} onClick={this.onClick}>
+        return <div style={style(this.isSelected)} onClick={this.onClick}>
             <br/><br/><br/>
             {this.props.text}
         </div>;

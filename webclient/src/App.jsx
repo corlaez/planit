@@ -53,38 +53,37 @@ class App extends Component {
   }
 
   send = (socket, alias) => {
-    return (text) => socket.emit('newMessage', {id: alias, m: text})
+    return (text) => {
+      this.state.selected = text;
+      socket.emit('newMessage', {id: alias, m: text})
+    } 
   }
 
   render() {
-    console.log(this.state.conns)
+    const send = this.send(this.socket, this.state.alias);
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Planning tool</h1>
-        </header>
         <h1>{this.state.alias ? 'Hi ' + this.state.alias +'!' : 'Please provide a name for the team to identify you'}</h1>
         {this.state.alias && 
           <button onClick={this.eraseName}>Erase name</button>}
         <p className="App-intro">
-          {this.state.alias && <input onChange={e => this.setState({ m: e.target.value})}/>}
-          {this.state.alias && <button onClick={this.onClick}>SEND</button>}
-
-          {!this.state.alias && <input onChange={e => this.setState({ newAlias: e.target.value})}/>}
+          {!this.state.alias && <input onChange={e => {
+            this.setState({ newAlias: e.target.value}); 
+            this.setState({selected: null})
+          }}/>}
           {!this.state.alias && <button onClick={this.onClick}>REGISTER</button>}
 
           {this.state.conns.filter(c => c && c.path ==='/').map(e => e.alias + ': '+ e.text).join(', ')}
 
         </p>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-          <Card send={this.send(this.socket, this.state.alias)} text='0'/>
-          <Card send={this.send(this.socket, this.state.alias)} text='1'/>
-          <Card send={this.send(this.socket, this.state.alias)} text='2'/>
-          <Card send={this.send(this.socket, this.state.alias)} text='3'/>
-          <Card send={this.send(this.socket, this.state.alias)} text='5'/>
-          <Card send={this.send(this.socket, this.state.alias)} text='8'/>
-          <Card send={this.send(this.socket, this.state.alias)} text='13'/>
+          <Card send={send} selected={this.state.selected} text='0'/>
+          <Card send={send} selected={this.state.selected} text='1'/>
+          <Card send={send} selected={this.state.selected} text='2'/>
+          <Card send={send} selected={this.state.selected} text='3'/>
+          <Card send={send} selected={this.state.selected} text='5'/>
+          <Card send={send} selected={this.state.selected} text='8'/>
+          <Card send={send} selected={this.state.selected} text='13'/>
         </div>
       </div>
     );
