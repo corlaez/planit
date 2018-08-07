@@ -28,8 +28,8 @@ io.on('connection', function(client) {
     }
     else{	
       client.info = info
-      callback(true)
       io.sockets.emit('updateConns', conns.map(e => e.info))
+      callback(true)
     }
   })  
   
@@ -38,15 +38,16 @@ io.on('connection', function(client) {
   client.on('leaveChannel', info => {
 	  const conn = conns.find(e => e.info && (e.info.alias === info.alias && e.info.path === info.path))
 	  if(conn) conn.info.alias = null
+	  io.sockets.emit('updateConns', conns.map(e => e.info))
   })  
 
   client.on('newMessage', function(data) {
-	console.log(data)
     if(client.info == null) {
-      client.disconnect()
       return
     }
-    data.alias = client.info.alias
-    client.broadcast.emit('incoming' + client.info.path, data)
+	console.log(client.info.alias + ': ' + data.m)
+    client.info.text = data.m
+	io.sockets.emit('updateConns', conns.map(e => e.info))
+    //client.broadcast.emit('incoming' + client.info.path, data)
   })
 })
