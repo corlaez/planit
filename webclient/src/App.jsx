@@ -12,7 +12,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.socket = io('http://localhost:3001')
+    this.socket = io('http://192.168.1.143:3001')
     this.socket.on('connect', () => this.setState({ isConnected: true }))
     this.socket.on('disconnect', () => this.setState({ isConnected: false }))
     this.socket.on('updateConns', (conns) => this.setState({ conns }))
