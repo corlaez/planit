@@ -9,6 +9,10 @@ const style = selected => ({
     backgroundColor: selected ? 'red' : 'white'
 });
 
+const styleWrapper = {
+    width: 150,
+};
+
 class Card extends React.Component {
     state = {  }
 
@@ -26,9 +30,14 @@ class Card extends React.Component {
     }
 
     render() { 
-        return <div style={style(this.isSelected)} onClick={this.onClick}>
+        return <div style={styleWrapper}>
+          <div style={style(this.isSelected)} onClick={this.onClick}>
             <br/><br/><br/>
             {this.props.text}
+          </div>
+          {this.props.show && this.props.members
+            .filter(member => member.text === this.props.text)
+            .map(member => <div key={member.alias}>{member.alias}</div>)}
         </div>;
     }
 }

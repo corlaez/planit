@@ -59,6 +59,10 @@ class App extends Component {
     } 
   }
 
+  membersInfo = () => {
+    return this.state.conns.filter(c => c && c.path ===this.path())
+  }
+
   render() {
     const send = this.send(this.socket, this.state.alias);
     return (
@@ -72,19 +76,30 @@ class App extends Component {
             this.setState({selected: null})
           }}/>}
           {!this.state.alias && <button onClick={this.onClick}>REGISTER</button>}
-
-          {this.state.conns.filter(c => c && c.path ==='/').map(e => e.alias + ': '+ e.text).join(', ')}
-
         </p>
+        {this.membersInfo().every(i => i.text != null) ? <button 
+          onMouseDown={() => this.setState({show: true})} 
+          onMouseLeave={() => this.setState({show: false})} 
+          onMouseUp={() => this.setState({show: false})}>
+          Show Answers
+        </button> :
+          <div>Waiting for {this.membersInfo().filter(i => i.text == null).map(i => i.alias).concat(', ')}.</div>
+        }
+        <br/>
+        <br/>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-          <Card send={send} selected={this.state.selected} text='0'/>
-          <Card send={send} selected={this.state.selected} text='1'/>
-          <Card send={send} selected={this.state.selected} text='2'/>
-          <Card send={send} selected={this.state.selected} text='3'/>
-          <Card send={send} selected={this.state.selected} text='5'/>
-          <Card send={send} selected={this.state.selected} text='8'/>
-          <Card send={send} selected={this.state.selected} text='13'/>
+          {['0','1','2','3','5','8','13'].map(text=> 
+            <Card
+              key={text}
+              show={this.state.show}
+              members={this.membersInfo()}
+              send={send}
+              selected={this.state.selected}
+              text={text}/>
+          )}
         </div>
+        {false && this.state.show && this.membersInfo().map(e => e.alias + ': '+ e.text).join(', ')}
+
       </div>
     );
   }
