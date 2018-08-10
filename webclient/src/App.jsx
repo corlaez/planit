@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Card from './Card';
 import io from 'socket.io-client';
@@ -54,7 +53,7 @@ class App extends Component {
 
   send = (socket, alias) => {
     return (text) => {
-      this.state.selected = text;
+      this.setState({selected: text});
       socket.emit('newMessage', {id: alias, m: text})
     } 
   }
