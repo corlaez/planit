@@ -1,5 +1,7 @@
 # plan it
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/corlaez/planit.svg)](https://greenkeeper.io/)
+
 A tool for poker planning. Uses an static client and a socket server.
 
 The paths of the url represent rooms, rooms share information about members and chosen cards.
