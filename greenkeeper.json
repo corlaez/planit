@@ -1,0 +1,10 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "socketserver/package.json",
+        "webclient/package.json"
+      ]
+    }
+  }
+}
